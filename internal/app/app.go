@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"github.com/go-gl/gl/v4.5-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/lHACKERMANl/rgb/internal/renderService"
@@ -25,29 +26,26 @@ func NewApp() *App {
 }
 
 func (a *App) Run() error {
-
 	if err := a.window.Init(800, 600, "2D Render App"); err != nil {
-		return err
+		return fmt.Errorf("window initialization failed: %v", err)
 	}
 	defer a.window.Cleanup()
 
-	if err := gl.Init(); err != nil {
-		return err
-	}
+	fmt.Printf("OpenGL Vendor: %s\n", gl.GoStr(gl.GetString(gl.VENDOR)))
+	fmt.Printf("OpenGL Renderer: %s\n", gl.GoStr(gl.GetString(gl.RENDERER)))
 
 	if err := a.shader.Init(); err != nil {
-		return err
+		return fmt.Errorf("shader initialization failed: %v", err)
 	}
 	defer a.shader.Cleanup()
 
 	if err := a.render.Init(); err != nil {
-		return err
+		return fmt.Errorf("render initialization failed: %v", err)
 	}
 	defer a.render.Cleanup()
 
 	triangle := &glPackage.Shape{
 		Vertices: []float32{
-
 			-0.5, -0.5,
 			0.5, -0.5,
 			0.0, 0.5,
@@ -56,10 +54,11 @@ func (a *App) Run() error {
 	}
 
 	if err := a.render.PrepareShape(triangle); err != nil {
-		return err
+		return fmt.Errorf("shape preparation failed: %v", err)
 	}
 
 	a.isRunning = true
+	fmt.Println("Приложение запущено. Нажмите ESC для выхода.")
 
 	for a.isRunning && !a.window.ShouldClose() {
 		a.update()
@@ -72,18 +71,17 @@ func (a *App) Run() error {
 }
 
 func (a *App) update() {
-
 	if a.window.IsKeyPressed(glfw.KeyEscape) {
 		a.isRunning = false
 	}
 }
 
 func (a *App) render_frame() {
-
-	gl.Clear(gl.COLOR_BUFFER_BIT)
 	gl.ClearColor(0.2, 0.3, 0.3, 1.0)
+	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	a.shader.Use()
 
+	// Рендеринг фигуры
 	a.render.Draw()
 }

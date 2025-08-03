@@ -14,28 +14,7 @@ func New() *ShaderService {
 	return &ShaderService{}
 }
 
-const vertexShaderSource = `
-#version 450 core
-layout (location = 0) in vec2 aPos;
-
-void main()
-{
-    gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
-}
-`
-
-const fragmentShaderSource = `
-#version 450 core
-out vec4 FragColor;
-
-void main()
-{
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);  
-}
-`
-
 func (s *ShaderService) Init() error {
-
 	vertexShader, err := s.compileShader(vertexShaderSource, gl.VERTEX_SHADER)
 	if err != nil {
 		return fmt.Errorf("vertex shader compilation failed: %v", err)
@@ -63,14 +42,17 @@ func (s *ShaderService) Init() error {
 		return fmt.Errorf("program linking failed: %s", log)
 	}
 
+	fmt.Println("Шейдеры успешно скомпилированы и связаны")
 	return nil
 }
 
 func (s *ShaderService) compileShader(source string, shaderType uint32) (uint32, error) {
 	shader := gl.CreateShader(shaderType)
+
 	csources, free := gl.Strs(source)
+	defer free()
+
 	gl.ShaderSource(shader, 1, csources, nil)
-	free()
 	gl.CompileShader(shader)
 
 	var status int32

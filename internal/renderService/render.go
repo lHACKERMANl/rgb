@@ -16,7 +16,6 @@ func New() *RenderService {
 }
 
 func (r *RenderService) Init() error {
-
 	return nil
 }
 
