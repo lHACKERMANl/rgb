@@ -1,17 +1,11 @@
 package composite
 
+import (
+	dto "github.com/lHACKERMANl/rgb/renderService/internal/dto/handler"
+)
+
 type RenderHandlerAdapter interface {
-	Init() error
+	Init(dto.RenderInitInputHandler) error
 	Render()
 	Cleanup()
-}
-
-type Render struct {
-	Handler RenderHandlerAdapter
-}
-
-func NewRender() *Render {
-	return &Render{
-		handler.NewRender(),
-	}
 }
