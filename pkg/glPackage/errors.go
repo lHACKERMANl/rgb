@@ -1,8 +1,8 @@
-package glpackage
+package glPackage
 
 import "errors"
 
 var (
-	errInvalidIndicesAndVertices = errors.New("indices and vertices must not be empty")
-	errInvalidVertexCount        = errors.New("vertices must be in x,y pairs")
+	ErrInvalidIndicesAndVertices = errors.New("indices and vertices must not be empty")
+	ErrInvalidVertexCount        = errors.New("vertices must be in x,y pairs")
 )

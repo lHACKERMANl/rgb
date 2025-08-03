@@ -1,4 +1,4 @@
-package glpackage
+package glPackage
 
 type ShapeAdapter interface {
 	GetVertices() []float32
@@ -6,8 +6,8 @@ type ShapeAdapter interface {
 }
 
 type Shape struct {
-	Vertices []float32
-	Indices  []uint32
+	Vertices []float32 `json:"vertices"`
+	Indices  []uint32  `json:"indices"`
 }
 
 func (s *Shape) GetVertices() []float32 { return s.Vertices }
